@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; media-src http://127.0.0.1:48473; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'self';"
+    />
+    <title>Say It Loud</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, system-ui, sans-serif;
+        background: #1c1c1e;
+        color: #f2f2f7;
+        font-size: 13px;
+        user-select: none;
+      }
+      header {
+        padding: 12px 14px;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 1px solid #2c2c2e;
+      }
+      #player {
+        padding: 14px;
+        border-bottom: 1px solid #2c2c2e;
+      }
+      #now {
+        font-weight: 500;
+        margin-bottom: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #d1d1d6;
+      }
+      #seek {
+        width: 100%;
+        accent-color: #0a84ff;
+        cursor: pointer;
+      }
+      .times {
+        display: flex;
+        justify-content: space-between;
+        color: #8e8e93;
+        font-variant-numeric: tabular-nums;
+        margin: 4px 0 12px;
+      }
+      .controls {
+        display: flex;
+        gap: 6px;
+      }
+      .controls button {
+        flex: 1;
+        padding: 8px 0;
+        border: none;
+        border-radius: 8px;
+        background: #2c2c2e;
+        color: #f2f2f7;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .controls button:hover {
+        background: #3a3a3c;
+      }
+      #playpause {
+        background: #0a84ff;
+      }
+      #playpause:hover {
+        background: #3398ff;
+      }
+      h2 {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #8e8e93;
+        margin: 14px 14px 6px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 8px 12px;
+        overflow-y: auto;
+      }
+      li {
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      li:hover {
+        background: #2c2c2e;
+      }
+      li.active {
+        background: #0a84ff33;
+        color: #4da3ff;
+        font-weight: 500;
+      }
+      li.empty {
+        color: #8e8e93;
+        cursor: default;
+        font-style: italic;
+      }
+      li.empty:hover {
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <header>🔊 Say It Loud</header>
+    <section id="player">
+      <div id="now">Nothing playing yet</div>
+      <input id="seek" type="range" min="0" max="0" value="0" step="0.1" />
+      <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+      <div class="controls">
+        <button id="back5" title="Back 5 seconds">« 5s</button>
+        <button id="playpause">Play</button>
+        <button id="stop">Stop</button>
+        <button id="replay">Replay</button>
+        <button id="fwd5" title="Forward 5 seconds">5s »</button>
+      </div>
+    </section>
+    <h2>Recent clips</h2>
+    <ul id="list"></ul>
+    <script src="renderer.js"></script>
+  </body>
+</html>

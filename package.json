@@ -1,0 +1,22 @@
+{
+  "name": "say-it-loud",
+  "version": "1.0.0",
+  "description": "Drop audio clips in a folder and play them in a small floating window. A tiny CLI other apps and AI agents can call to get the folder and play a sound.",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "bin": {
+    "say-it-loud": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc && cp src/renderer.html dist/renderer.html",
+    "app": "electron .",
+    "start": "npm run build && electron .",
+    "package": "npm run build && electron-packager . \"Say It Loud\" --platform=darwin --arch=arm64 --out=build --overwrite --app-bundle-id=com.sayitloud.app --ignore=\"/src\" --ignore=\"/build\""
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.0.1",
+    "@types/node": "^26.0.0",
+    "electron": "^42.4.1",
+    "typescript": "^6.0.3"
+  }
+}
