@@ -69,6 +69,27 @@
       .controls button:hover {
         background: #3a3a3c;
       }
+      .speed {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 12px;
+      }
+      .speed label {
+        color: #8e8e93;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .speed select {
+        background: #2c2c2e;
+        color: #f2f2f7;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 8px;
+        font-size: 12px;
+        cursor: pointer;
+      }
       #playpause {
         background: #0a84ff;
       }
@@ -126,6 +147,18 @@
         <button id="stop">Stop</button>
         <button id="replay">Replay</button>
         <button id="fwd5" title="Forward 5 seconds">5s »</button>
+      </div>
+      <div class="speed">
+        <label for="speed">Speed</label>
+        <select id="speed">
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1">1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2">2×</option>
+        </select>
       </div>
     </section>
     <h2>Recent clips</h2>

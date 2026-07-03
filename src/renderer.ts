@@ -31,6 +31,25 @@ const seek = byId('seek') as HTMLInputElement;
 const curEl = byId('cur');
 const durEl = byId('dur');
 const playPause = byId('playpause');
+const speedEl = byId('speed') as HTMLSelectElement;
+
+// Playback speed is remembered between sessions, so the next clip you play
+// (from the CLI or the list) picks up the speed you last chose.
+const SPEED_KEY = 'say-it-loud:speed';
+
+function loadSpeed(): number {
+  const saved = parseFloat(localStorage.getItem(SPEED_KEY) || '');
+  return isFinite(saved) && saved > 0 ? saved : 1;
+}
+
+let speed = loadSpeed();
+
+// Set defaultPlaybackRate too, so loading a new clip keeps the chosen speed
+// instead of snapping back to 1×.
+function applySpeed(): void {
+  audio.defaultPlaybackRate = speed;
+  audio.playbackRate = speed;
+}
 
 function formatTime(seconds: number): string {
   if (!isFinite(seconds)) return '0:00';
@@ -42,6 +61,7 @@ function formatTime(seconds: number): string {
 function play(name: string): void {
   current = name;
   audio.src = clipUrl(name);
+  applySpeed();
   audio.play().catch(() => { /* user can press play */ });
   nowEl.textContent = name;
   renderList();
@@ -87,6 +107,13 @@ byId('fwd5').addEventListener('click', () => {
 });
 seek.addEventListener('input', () => {
   audio.currentTime = parseFloat(seek.value);
+});
+speedEl.value = String(speed);
+applySpeed();
+speedEl.addEventListener('change', () => {
+  speed = parseFloat(speedEl.value) || 1;
+  localStorage.setItem(SPEED_KEY, String(speed));
+  applySpeed();
 });
 
 // Keep the bar and times in step with the audio

@@ -2,8 +2,9 @@
 
 A tiny Mac tool that plays audio clips. Other apps and AI agents drop a clip in a
 folder and ask it to play. A small floating window shows the recent clips with a
-play/stop/replay control and a scrub bar. It never steals focus, and it keeps only
-the newest 20 clips, deleting older ones automatically.
+play/stop/replay control, a scrub bar, and a playback-speed picker that remembers
+your choice for next time. It never steals focus, and it keeps only the newest 20
+clips, deleting older ones automatically.
 
 ## Install
 
