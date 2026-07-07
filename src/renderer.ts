@@ -10,6 +10,8 @@ interface Clip {
 interface Window {
   api: {
     listClips: () => Promise<Clip[]>;
+    addClip: (filePath: string) => Promise<string | null>;
+    getPathForFile: (file: File) => string;
     onClipsUpdate: (cb: (clips: Clip[]) => void) => void;
     onPlayFile: (cb: (name: string) => void) => void;
     ready: () => void;
@@ -140,3 +142,50 @@ window.api.listClips().then((initial) => {
   renderList();
 });
 window.api.ready();
+
+// Drag and drop audio files
+let dragCounter = 0;
+
+document.addEventListener('dragenter', (e) => {
+  e.preventDefault();
+  dragCounter++;
+  if (dragCounter === 1) {
+    document.body.classList.add('drag-over');
+  }
+});
+
+document.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  dragCounter--;
+  if (dragCounter === 0) {
+    document.body.classList.remove('drag-over');
+  }
+});
+
+document.addEventListener('dragover', (e) => {
+  e.preventDefault();
+});
+
+document.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  dragCounter = 0;
+  document.body.classList.remove('drag-over');
+
+  if (!e.dataTransfer) return;
+  const files = Array.from(e.dataTransfer.files);
+  let firstPlay: string | null = null;
+
+  for (const file of files) {
+    const filePath = window.api.getPathForFile(file);
+    if (filePath) {
+      const name = await window.api.addClip(filePath);
+      if (name && !firstPlay) {
+        firstPlay = name;
+      }
+    }
+  }
+
+  if (firstPlay) {
+    play(firstPlay);
+  }
+});

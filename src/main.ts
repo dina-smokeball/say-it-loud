@@ -5,7 +5,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as http from 'http';
-import { AUDIO_DIR, HOST, PORT, MIME_TYPES } from './shared';
+import { AUDIO_DIR, HOST, PORT, MIME_TYPES, AUDIO_EXTENSIONS } from './shared';
 import { ensureBucket, listClips, pruneBucket } from './bucket';
 
 let win: BrowserWindow | null = null;
@@ -74,6 +74,32 @@ let rendererReady = false;
 let pendingPlay: string | null = null;
 
 ipcMain.handle('clips:list', () => listClips());
+
+ipcMain.handle('clip:add', async (event, filePath) => {
+  try {
+    if (!fs.existsSync(filePath)) return null;
+    const stat = fs.statSync(filePath);
+    if (!stat.isFile()) return null;
+
+    const ext = path.extname(filePath).toLowerCase();
+    if (!AUDIO_EXTENSIONS.includes(ext)) {
+      return null;
+    }
+
+    ensureBucket();
+    const destName = path.basename(filePath);
+    const destPath = path.join(AUDIO_DIR, destName);
+    
+    fs.copyFileSync(filePath, destPath);
+    pruneBucket();
+    sendClips();
+    
+    return destName;
+  } catch (err) {
+    console.error('Error adding clip via drag and drop:', err);
+    return null;
+  }
+});
 
 ipcMain.on('renderer:ready', () => {
   rendererReady = true;
